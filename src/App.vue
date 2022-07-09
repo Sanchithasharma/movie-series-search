@@ -1,25 +1,18 @@
 <template>
-  <HelloWorld msg="Movie Search app"/>
+  <MovieSearch />
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import MovieSearch from './views/MovieSearch.vue'
+
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    MovieSearch
   }
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
 </style>
