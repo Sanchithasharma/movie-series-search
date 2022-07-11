@@ -1,5 +1,9 @@
 <template>
+<div class="app">
+  <h2>movie search and series search</h2>
   <MovieSearch />
+</div>
+
 </template>
 
 <script>
@@ -14,5 +18,15 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+  $color: red;
+
+  .app {
+    
+    h2 {
+      color: blue;
+      border: 1px solid red;
+    }
+  }
+
 </style>
