@@ -11,7 +11,7 @@
         <li>
           <span>
             <el-image
-              style="width: 60px; height: 60px"
+              style="width: 80px; height: 80px"
               :src="item.Poster"
               fit="fill"
             />
@@ -73,13 +73,14 @@ export default {
 
 <style lang="scss">
 .movie-list-container {
-  height: 500px;
+  height: 496px;
   overflow: scroll;
   .movie-item {
     border-bottom: 1px lightgray solid;
     margin: 4px;
     overflow: scroll;
     padding-left: 0px;
+    // padding: 4px;
     :hover {
       background-color: #ebebeb;
       cursor: pointer;
@@ -89,16 +90,19 @@ export default {
       flex-direction: row;
       align-items: center;
       padding-left: 4%;
+      .el-image {
+        border-radius: 4px;
+      }
     }
     .movie-info {
-      margin-left: 5%;
+      margin-left: 4%;
       p.movie-year {
         font-size: small;
         color: gray;
       }
       p.movie-title {
         font-size: large;
-        color: gray;
+        color: rgb(66, 66, 66);
       }
     }
   }

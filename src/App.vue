@@ -29,11 +29,12 @@ export default {
 <style lang="scss">
 .app {
   font-family: Arial, Helvetica, sans-serif;
+  color: rgba(0, 0, 0, 0.62);
   .app-body {
     display: flex;
     flex-direction: row;
     .movie-list {
-      width: 36%;
+      width: 76%;
       border-right: 1px solid lightgray;
       padding: 2px;
       margin-right: 8px;

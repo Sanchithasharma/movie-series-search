@@ -4,16 +4,10 @@
       class="el-menu-demo"
       mode="horizontal"
       background-color="#666666"
-      text-color="#fff"
-      active-text-color="#ffd04b"
     >
-      <el-input
-        v-model="input1"
-        placeholder="Please input"
-        class="input-with-select"
-      >
-        <template #prepend>
-          <el-button round>Search</el-button>
+      <el-input v-model="input1" placeholder="Type something">
+        <template #prefix>
+          <el-icon class="el-input__icon"><search /></el-icon>
         </template>
       </el-input>
 
