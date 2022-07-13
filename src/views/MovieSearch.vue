@@ -3,7 +3,7 @@
     <el-menu
       class="el-menu-demo"
       mode="horizontal"
-      background-color="#545c64"
+      background-color="#666666"
       text-color="#fff"
       active-text-color="#ffd04b"
     >

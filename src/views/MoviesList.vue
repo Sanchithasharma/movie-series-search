@@ -1,7 +1,7 @@
 <template>
   <div class="movie-list">
-    <h5>{{ moviesList.totalResults }} results</h5>
-    <div class="movie-list-container">
+    <div class="movie-list-length">{{ moviesList.totalResults }} results</div>
+    <div class="movie-list-container" v-infinite-scroll="load">
       <ul
         class="movie-item"
         v-for="item in moviesList.Search"
@@ -11,14 +11,14 @@
         <li>
           <span>
             <el-image
-              style="width: 100px; height: 100px"
+              style="width: 60px; height: 60px"
               :src="item.Poster"
               fit="fill"
             />
           </span>
-          <span>
-            <p>{{ item.Title }}</p>
-            <p>{{ item.Year }}</p>
+          <span class="movie-info">
+            <p class="movie-title">{{ item.Title }}</p>
+            <p class="movie-year">{{ item.Year }}</p>
           </span>
         </li>
       </ul>
@@ -35,19 +35,22 @@ export default {
     return {
       moviesList: [],
       count: ref(0),
+      page: 1
     };
   },
   mounted() {
-    this.getMoviesList();
+    this.getMoviesList(this.page);
   },
   methods: {
-    getMoviesList() {
+    getMoviesList(page) {
       console.log("movie list");
       axios
         .get("https://www.omdbapi.com/?apikey=3b773132", {
           params: {
             s: "game",
             type: "",
+            y: '1970',
+            page: page
           },
         })
         .then((response) => {
@@ -59,8 +62,10 @@ export default {
         });
     },
     load() {
-      this.count.value += 2;
-      console.log('loading')
+      // this.count.value += 2;
+      // this.page = this.page + 1
+      // this.getMoviesList(this.page);
+      console.log(this.page);
     },
   },
 };
@@ -72,16 +77,35 @@ export default {
   overflow: scroll;
   .movie-item {
     border-bottom: 1px lightgray solid;
-    margin: 2px;
+    margin: 4px;
     overflow: scroll;
+    padding-left: 0px;
+    :hover {
+      background-color: #ebebeb;
+      cursor: pointer;
+    }
     li {
       display: flex;
       flex-direction: row;
-
-      :hover {
-        background-color: aquamarine  ;
+      align-items: center;
+      padding-left: 4%;
+    }
+    .movie-info {
+      margin-left: 5%;
+      p.movie-year {
+        font-size: small;
+        color: gray;
+      }
+      p.movie-title {
+        font-size: large;
+        color: gray;
       }
     }
   }
+}
+
+.movie-list-length {
+  margin: 8%;
+  color: gray;
 }
 </style>

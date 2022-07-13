@@ -6,7 +6,6 @@
 
     <div class="app-body">
       <MoviesList />
-      <el-divider direction="vertical" />
       <MovieView />
     </div>
   </div>
@@ -28,18 +27,17 @@ export default {
 </script>
 
 <style lang="scss">
-$color: red;
-
 .app {
-  .app-header {
-
-  }
-
+  font-family: Arial, Helvetica, sans-serif;
   .app-body {
-    border: 1px solid red;
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    .movie-list {
+      width: 36%;
+      border-right: 1px solid lightgray;
+      padding: 2px;
+      margin-right: 8px;
+    }
   }
 }
 </style>
