@@ -62,9 +62,6 @@ export default {
         });
     },
     load() {
-      // this.count.value += 2;
-      // this.page = this.page + 1
-      // this.getMoviesList(this.page);
       console.log(this.page);
     },
   },
@@ -77,10 +74,10 @@ export default {
   overflow: scroll;
   .movie-item {
     border-bottom: 1px lightgray solid;
-    margin: 4px;
+    margin: 8px;
+    padding-bottom: 8px;
     overflow: scroll;
     padding-left: 0px;
-    // padding: 4px;
     :hover {
       background-color: #ebebeb;
       cursor: pointer;
@@ -92,6 +89,7 @@ export default {
       padding-left: 4%;
       .el-image {
         border-radius: 4px;
+        padding: 12px;
       }
     }
     .movie-info {
@@ -103,13 +101,14 @@ export default {
       p.movie-title {
         font-size: large;
         color: rgb(66, 66, 66);
+        word-wrap: break-word;
       }
     }
   }
 }
 
 .movie-list-length {
-  margin: 8%;
+  margin: 4%;
   color: gray;
 }
 </style>

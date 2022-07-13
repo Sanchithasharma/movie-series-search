@@ -11,7 +11,7 @@
 
       <div class="movie-info">
         <h1>{{ movieInfo.Title }}</h1>
-        <div>
+        <div class="movie-year-genre-runtime">
           <span class="movie-rated">{{ movieInfo.Rated }}</span>
           <span> &#183; </span>
 
@@ -57,15 +57,21 @@
 import axios from "axios";
 
 export default {
+  name: "movie-view",
   data() {
     return {
       movieInfo: {},
+      idmbId: 'tt2267998'
     };
   },
   methods: {
     getMovieInfo() {
       axios
-        .get("http://www.omdbapi.com/?i=tt2267998&apikey=3b773132")
+        .get("http://www.omdbapi.com/?apikey=3b773132", {
+          params: {
+            i: this.idmbId,
+          },
+        })
         .then((response) => {
           console.log(response.data);
           this.movieInfo = response.data;
@@ -89,10 +95,6 @@ $font-color: gray;
   .movie-view-container {
     display: flex;
     justify-content: space-around;
-    // .watchlist-button-container {
-    //   margin-left: auto;
-    //   margin-right: 0;
-    // }
     .el-button {
       width: 168px;
       height: 40px;
@@ -112,6 +114,10 @@ $font-color: gray;
   .movie-info {
     margin-top: 100px;
     margin-left: 20px;
+    word-wrap: break-word;
+    .movie-year-genre-runtime {
+      font-size: larger;
+    }
     .movie-rated {
       border: 1px $font-color solid;
       border-radius: 4px;
