@@ -1,31 +1,75 @@
 <template>
   <div class="movie-search">
     <el-menu
-    :default-active="activeIndex2"
-    class="el-menu-demo"
-    mode="horizontal"
-    background-color="#545c64"
-    text-color="#fff"
-    active-text-color="#ffd04b"
-    @select="handleSelect"
-  >
-  <el-button :icon="Search" size="large" />
-  </el-menu>
+      class="el-menu-demo"
+      mode="horizontal"
+      background-color="#545c64"
+      text-color="#fff"
+      active-text-color="#ffd04b"
+    >
+      <el-input
+        v-model="input1"
+        placeholder="Please input"
+        class="input-with-select"
+      >
+        <template #prepend>
+          <el-button round>Search</el-button>
+        </template>
+      </el-input>
+
+      <div class="slidecontainer">
+        <input type="range" min="1" max="100" value="50" />
+      </div>
+
+      <el-radio-group @change="chooseTypeOfList" v-model="radio">
+        <el-radio label="" size="small">Any</el-radio>
+        <el-radio label="movie" size="small">Movies</el-radio>
+        <el-radio label="series" size="small">Series</el-radio>
+        <el-radio label="episode" size="small">Episode</el-radio>
+      </el-radio-group>
+    </el-menu>
   </div>
 </template>
 
 <script>
+import { ref } from "vue";
+
+// const radio3 = ref('1')
 export default {
-}
+  data() {
+    return {
+      radio: ref(""),
+      input1: "",
+    };
+  },
+  methods: {
+    chooseTypeOfList() {
+      console.log(this.radio);
+    },
+  },
+};
 </script>
 
-<style>
-    .el-menu {
-        height: 100px;
-    }
+<style lang="scss">
+.el-menu {
+  height: 100px;
 
-    .el-button {
-        margin-left: 20px;
-        margin-top: 10px;
+  .el-radio-group {
+    // margin-left: 50%;
+    span.el-radio__label {
+      color: white;
     }
+  }
+
+  .el-input {
+    height: 40px;
+    margin: 35px;
+    width: 20%;
+  }
+
+  .slidecontainer {
+    display: flex;
+    margin: 2px 40px;
+  }
+}
 </style>
