@@ -15,7 +15,7 @@
           </template>
         </el-input>
       </div>
-
+      <el-button @click="searchShowByString">Submit</el-button>
     </el-menu>
   </div>
 </template>
@@ -35,6 +35,10 @@ export default {
     chooseTypeOfList() {
       console.log(this.radio);
     },
+    searchShowByString() {
+      console.log(this.searchString);
+      this.emitter.emit("searchString", { eventContent: this.searchString });
+    },
   },
 };
 </script>
@@ -47,6 +51,10 @@ export default {
     label.el-radio.el-radio--small {
       color: white;
     }
+  }
+  .movie-search-menu-bar {
+    display: flex;
+    flex-direction: row;
   }
   .search-container {
     .el-input {

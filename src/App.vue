@@ -34,13 +34,14 @@ export default {
     display: flex;
     flex-direction: row;
     .movie-list {
-      width: 72%;
+      width: 700px;
       border-right: 1px solid lightgray;
       padding: 2px;
       margin-right: 8px;
     }
     .movie-view {
-      widows: 38%;
+      width: 100%;
+
     }
   }
 }

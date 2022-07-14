@@ -61,7 +61,7 @@ export default {
   data() {
     return {
       movieInfo: {},
-      idmbId: 'tt2267998'
+      idmbId: 'tt2267998',
     };
   },
   methods: {
@@ -84,6 +84,12 @@ export default {
   mounted() {
     this.getMovieInfo();
   },
+  created (){
+    this.emitter.on('imdbID', (evt) => {
+      this.idmbId = evt.eventContent;
+      this.getMovieInfo()
+    })
+  }
 };
 </script>
 
