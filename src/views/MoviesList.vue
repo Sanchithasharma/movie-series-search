@@ -1,12 +1,12 @@
 <template>
-  <div class="movie-list">
+  <div class="movie-list" v-loading="isLoading">
     <div class="movie-list-length">
       <span>{{ moviesList.totalResults }} results</span>
       <el-link type="primary" @click="dialogTableVisible = true"
         >View Watchlist</el-link
       >
     </div>
-    <div class="movie-list-container" v-infinite-scroll="load">
+    <div class="movie-list-container">
       <ul
         class="movie-item"
         v-for="item in moviesList.Search"
@@ -30,13 +30,41 @@
       </ul>
     </div>
 
-    <el-dialog v-model="dialogTableVisible" title="Watchlist">
-      <el-table :data="gridData">
-        <el-table-column property="Title" label="Title" width="150" />
-        <el-table-column property="Type" label="Type" width="200" />
-        <el-table-column property="Runtime" label="Runtime" />
-        <el-table-column property="Genre" label="Genre" />
-      </el-table>
+    <el-dialog v-model="dialogTableVisible" title="Watchlist" center>
+      <div class="watch-list-container" style="height: 50vh" center>
+        <h3 v-if="watchList.length === 0">
+          You have not watch-listed anything yet
+        </h3>
+        <ul
+          class="watch-list-item"
+          v-for="item in watchList"
+          :key="item.imdbID"
+          @click="loadWatchListToView(item)"
+        >
+          <li>
+            <span>
+              <el-image
+                style="width: 60px; height: 80px"
+                :src="item.Poster"
+                fit="fill"
+              />
+            </span>
+            <span class="movie-info">
+              <p class="movie-title" style="font-size: small">
+                {{ item.Title }}
+              </p>
+              <p class="movie-year">
+                {{ item.Year }}
+                <span> &#183; </span>
+                {{ item.Runtime }}
+              </p>
+              <p class="movie-genre">{{ item.Genre }}</p>
+            </span>
+
+            <!-- <el-icon class="delete-icon" size="28px" color="#F56C6C" @click="deleteShowFromWatchList(item)"><DeleteFilled /></el-icon> -->
+          </li>
+        </ul>
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -44,6 +72,7 @@
 <script>
 import axios from "axios";
 import { ref } from "vue";
+import { store } from "../store/watchlist.js";
 
 export default {
   data() {
@@ -53,53 +82,13 @@ export default {
       page: 1,
       dialogTableVisible: false,
       searchString: "star",
-      gridData: [
-        {
-          Title: "Gone Girl",
-          Year: "2014",
-          Rated: "R",
-          Released: "03 Oct 2014",
-          Runtime: "149 min",
-          Genre: "Drama, Mystery, Thriller",
-          Director: "David Fincher",
-          Writer: "Gillian Flynn",
-          Actors: "Ben Affleck, Rosamund Pike, Neil Patrick Harris",
-          Plot: "With his wife's disappearance having become the focus of an intense media circus, a man sees the spotlight turned on him when it's suspected that he may not be innocent.",
-          Language: "English",
-          Country: "United States",
-          Awards: "Nominated for 1 Oscar. 64 wins & 188 nominations total",
-          Poster:
-            "https://m.media-amazon.com/images/M/MV5BMTk0MDQ3MzAzOV5BMl5BanBnXkFtZTgwNzU1NzE3MjE@._V1_SX300.jpg",
-          Ratings: [
-            {
-              Source: "Internet Movie Database",
-              Value: "8.1/10",
-            },
-            {
-              Source: "Rotten Tomatoes",
-              Value: "87%",
-            },
-            {
-              Source: "Metacritic",
-              Value: "79/100",
-            },
-          ],
-          Metascore: "79",
-          imdbRating: "8.1",
-          imdbVotes: "957,908",
-          imdbID: "tt2267998",
-          Type: "movie",
-          DVD: "13 Jan 2015",
-          BoxOffice: "$167,767,189",
-          Production: "N/A",
-          Website: "N/A",
-          Response: "True",
-        },
-      ],
+      watchList: [],
+      isLoading: false,
     };
   },
   mounted() {
     this.getMoviesList(this.page);
+    this.watchList = store.state.watchList;
   },
   created() {
     this.emitter.on("searchString", (evt) => {
@@ -109,7 +98,7 @@ export default {
   },
   methods: {
     getMoviesList(page) {
-      console.log("movie list");
+      this.isLoading = true;
       axios
         .get("https://www.omdbapi.com/?apikey=3b773132", {
           params: {
@@ -122,30 +111,37 @@ export default {
         .then((response) => {
           console.log(response.data);
           this.moviesList = response.data;
+          this.isLoading = false;
         })
         .catch((error) => {
           console.log(error);
+          this.isLoading = false;
         });
-    },
-    load() {
-      console.log(this.page);
     },
     sendShowId(show) {
       this.emitter.emit("imdbID", { eventContent: show.imdbID });
     },
+    loadWatchListToView(show) {
+      this.dialogTableVisible = false;
+      this.sendShowId(show);
+    },
+    deleteShowFromWatchList(item) {
+      store.commit("removeFromWatchList", item);
+    }
   },
 };
 </script>
 
 <style lang="scss">
-.movie-list-container {
-  height: 496px;
-  overflow: scroll;
-  .movie-item {
+.movie-list-container,
+.watch-list-container {
+  height: 72vh;
+  overflow-y: auto;
+  .movie-item,
+  .watch-list-item {
     border-bottom: 1px lightgray solid;
     margin: 8px;
     padding-bottom: 8px;
-    overflow: scroll;
     padding-left: 0px;
     :hover {
       background-color: #ebebeb;
@@ -163,7 +159,8 @@ export default {
     }
     .movie-info {
       margin-left: 8px;
-      p.movie-year {
+      p.movie-year,
+      p.movie-genre {
         font-size: small;
         color: gray;
       }
@@ -176,6 +173,16 @@ export default {
   }
 }
 
+.watch-list-container {
+  border: 1px solid #d1dbe561;
+  .watch-list-item {
+  margin: 4px;
+    i.el-icon.delete-icon {
+      margin-right: 2vh;
+      margin-left: auto;
+    }
+  }
+}
 .movie-list-length {
   margin: 4%;
   color: gray;

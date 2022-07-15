@@ -1,6 +1,6 @@
 <template>
   <div class="movie-view">
-    <div class="movie-view-container">
+    <div class="movie-view-container" :v-loading="isLoading">
       <div class="movie-image">
         <el-image
           style="width: 200px; height: 300px"
@@ -28,7 +28,12 @@
       </div>
 
       <div class="watchlist-button-container">
-        <el-button size="large" type="info" plain>
+        <el-button
+          size="large"
+          type="info"
+          plain
+          @click="addThisShowToWatchList"
+        >
           Watchlist<el-icon class="el-icon--right"><CollectionTag /></el-icon>
         </el-button>
       </div>
@@ -55,17 +60,21 @@
 
 <script>
 import axios from "axios";
+import { store } from "../store/watchlist.js";
 
 export default {
   name: "movie-view",
   data() {
     return {
       movieInfo: {},
-      idmbId: 'tt2267998',
+      idmbId: "tt2267998",
+      showWatchListButton: true,
+      isLoading: false,
     };
   },
   methods: {
     getMovieInfo() {
+      this.isLoading = true;
       axios
         .get("http://www.omdbapi.com/?apikey=3b773132", {
           params: {
@@ -75,21 +84,36 @@ export default {
         .then((response) => {
           console.log(response.data);
           this.movieInfo = response.data;
+          this.isLoading = false;
         })
         .catch((error) => {
           console.log(error);
+          this.isLoading = false;
         });
+    },
+    addThisShowToWatchList() {
+      store.commit("addToWatchList", this.movieInfo);
+    },
+  },
+  computed: {
+    checkIfShowIsInWatchList() {
+      this.watchList.foreach((el) => {
+        if (el.imdbID === this.movieInfo.imdbID) {
+          return false;
+        }
+      });
+      return true;
     },
   },
   mounted() {
     this.getMovieInfo();
   },
-  created (){
-    this.emitter.on('imdbID', (evt) => {
+  created() {
+    this.emitter.on("imdbID", (evt) => {
       this.idmbId = evt.eventContent;
-      this.getMovieInfo()
-    })
-  }
+      this.getMovieInfo();
+    });
+  },
 };
 </script>
 
