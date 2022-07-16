@@ -1,64 +1,69 @@
 <template>
   <div class="movie-view">
     <el-card :body-style="{ height: '75vh', overflow: 'auto' }">
-      <div class="movie-view-container" :v-loading="isLoading">
-        <div class="movie-image">
-          <el-image
-            style="width: 20vh; height: 30vh"
-            :src="movieInfo.Poster"
-            fit="fill"
-          />
-        </div>
-
-        <div class="movie-info">
-          <h1>{{ movieInfo.Title }}</h1>
-          <div class="movie-year-genre-runtime">
-            <span class="movie-rated">{{ movieInfo.Rated }}</span>
-            <span> &#183; </span>
-
-            <span>{{ movieInfo.Year }} </span>
-            <span> &#183; </span>
-
-            <span>{{ movieInfo.Genre }} </span>
-            <span> &#183; </span>
-
-            <span>{{ movieInfo.Runtime }} </span>
+      <el-col class="no-view-to-show" v-if="!!movieInfo.Title === false"> Please click on any show from the list </el-col>
+      <el-col v-else class="no-view">
+        <div class="movie-view-container" :v-loading="isLoading">
+          <div class="movie-image">
+            <el-image
+              style="width: 20vh; height: 30vh"
+              :src="movieInfo.Poster"
+              fit="fill"
+            />
           </div>
-          <br />
-          <div>{{ movieInfo.Actors }}</div>
+
+          <div class="movie-info">
+            <h1>{{ movieInfo.Title }}</h1>
+            <div class="movie-year-genre-runtime">
+              <span class="movie-rated">{{ movieInfo.Rated }}</span>
+              <span> &#183; </span>
+
+              <span>{{ movieInfo.Year }} </span>
+              <span> &#183; </span>
+
+              <span>{{ movieInfo.Genre }} </span>
+              <span> &#183; </span>
+
+              <span>{{ movieInfo.Runtime }} </span>
+            </div>
+            <br />
+            <div>{{ movieInfo.Actors }}</div>
+          </div>
+
+          <div class="watchlist-button-container">
+            <el-button
+              size="large"
+              type="info"
+              plain
+              @click="addThisShowToWatchList"
+            >
+              Watchlist<el-icon class="el-icon--right"
+                ><CollectionTag
+              /></el-icon>
+            </el-button>
+          </div>
         </div>
 
-        <div class="watchlist-button-container">
-          <el-button
-            size="large"
-            type="info"
-            plain
-            @click="addThisShowToWatchList"
+        <el-divider />
+        <div class="movie-plot">
+          {{ movieInfo.Plot }}
+        </div>
+        <el-divider />
+
+        <div class="movie-ratings">
+          <div
+            class="rating"
+            v-for="item in movieInfo.Ratings"
+            :key="movieInfo.Ratings.indexOf(item)"
+            :gutter="12"
           >
-            Watchlist<el-icon class="el-icon--right"><CollectionTag /></el-icon>
-          </el-button>
+            <el-card>
+              <div class="rating-number">{{ item.Value }}</div>
+              <div class="rating-website">{{ item.Source }}</div>
+            </el-card>
+          </div>
         </div>
-      </div>
-
-      <el-divider />
-      <div class="movie-plot">
-        {{ movieInfo.Plot }}
-      </div>
-      <el-divider />
-
-      <div class="movie-ratings">
-        <div
-          class="rating"
-          v-for="item in movieInfo.Ratings"
-          :key="movieInfo.Ratings.indexOf(item)"
-          :gutter="12"
-        >
-          <el-card>
-            <div class="rating-number">{{ item.Value }}</div>
-            <div class="rating-website">{{ item.Source }}</div>
-          </el-card>
-        </div>
-      </div>
+      </el-col>
     </el-card>
   </div>
 </template>
@@ -128,6 +133,10 @@ $font-color: gray;
 
 .movie-view {
   padding: 16px;
+  .no-view-to-show {
+    text-align: center;
+    padding-top: 40%;
+  }
   .movie-view-container {
     display: flex;
     justify-content: space-around;
