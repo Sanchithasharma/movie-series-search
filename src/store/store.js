@@ -16,8 +16,10 @@ export const store = createStore({
       state.watchList.push(show)
       console.log(state.watchList)
     },
-    removeFromWatchList(state, show) {
-      state.watchList = state.watchList.filter(item => {item.imdbID !== show.imdbID})
+    removeFromWatchList(state, id) {
+      let arr = state.watchList
+      arr = arr.filter((obj) => obj.imdbID !==id)
+      state.watchList = arr
       console.log(state.watchList)
     },
     filterShowsByYear(state, selectedYear) {

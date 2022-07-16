@@ -64,7 +64,7 @@
               />
             </span>
             <span class="movie-info">
-              <el-link class="movie-title" style="font-size: small" @click="loadWatchListToView">
+              <el-link class="movie-title" style="font-size: small" @click="loadWatchListToView(item)">
                 {{ item.Title }}
               </el-link>
               <p class="movie-year">
@@ -147,11 +147,12 @@ export default {
       this.emitter.emit("imdbID", { eventContent: show.imdbID });
     },
     loadWatchListToView(show) {
+      console.log(show)
       this.dialogTableVisible = false;
       this.sendShowId(show);
     },
     deleteShowFromWatchList(item) {
-      store.commit("removeFromWatchList", item);
+      store.commit("removeFromWatchList", item.imdbID);
       console.log(item)
     },
     loadNextPage() {
