@@ -47,14 +47,13 @@
 
     <el-dialog v-model="dialogTableVisible" title="Watchlist" center>
       <div class="watch-list-container" style="height: 50vh" center>
-        <h3 v-if="watchList.length === 0">
+        <h3 v-if="watchList.length === 0" class="list-is-not-present">
           You have not watch-listed anything yet
         </h3>
         <ul
           class="watch-list-item"
           v-for="item in watchList"
           :key="item.imdbID"
-          @click="loadWatchListToView(item)"
         >
           <li>
             <span>
@@ -65,9 +64,9 @@
               />
             </span>
             <span class="movie-info">
-              <p class="movie-title" style="font-size: small">
+              <el-link class="movie-title" style="font-size: small" @click="loadWatchListToView">
                 {{ item.Title }}
-              </p>
+              </el-link>
               <p class="movie-year">
                 {{ item.Year }}
                 <span> &#183; </span>
@@ -76,7 +75,9 @@
               <p class="movie-genre">{{ item.Genre }}</p>
             </span>
 
-            <!-- <el-icon class="delete-icon" size="28px" color="#F56C6C" @click="deleteShowFromWatchList(item)"><DeleteFilled /></el-icon> -->
+            <el-button type="danger" @click="deleteShowFromWatchList(item)">
+              <el-icon><Delete /></el-icon>
+            </el-button>
           </li>
         </ul>
       </div>
@@ -151,6 +152,7 @@ export default {
     },
     deleteShowFromWatchList(item) {
       store.commit("removeFromWatchList", item);
+      console.log(item)
     },
     loadNextPage() {
       this.page++;
@@ -178,8 +180,7 @@ export default {
   height: 72vh;
   overflow-y: auto;
   margin-top: 2px;
-  .movie-item,
-  .watch-list-item {
+  .movie-item {
     border-bottom: 1px lightgray solid;
     margin: 8px;
     padding-bottom: 8px;
@@ -203,29 +204,49 @@ export default {
         }
       }
     }
-    .movie-info {
-      margin-left: 8px;
-      p.movie-year,
-      p.movie-genre {
-        font-size: small;
-        color: gray;
-      }
-      p.movie-title {
-        font-size: large;
-        color: rgb(66, 66, 66);
-        word-wrap: break-word;
-      }
-    }
+  }
+}
+.movie-info {
+  margin-left: 8px;
+  p.movie-year,
+  p.movie-genre {
+    font-size: small;
+    color: gray;
+  }
+  p.movie-title {
+    font-size: large;
+    color: rgb(66, 66, 66);
+    word-wrap: break-word;
   }
 }
 
 .watch-list-container {
   border: 1px solid #d1dbe561;
   .watch-list-item {
+    border-bottom: 1px lightgray solid;
+    margin: 8px;
+    padding-bottom: 8px;
+    padding-left: 0px;
+    li {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      padding-left: 4%;
+      .el-image {
+        margin-top: 2%;
+        border-radius: 4px;
+        padding: 12px;
+
+        .el-image__error span {
+          display: none;
+        }
+      }
+    }
     margin: 4px;
-    i.el-icon.delete-icon {
+    .el-button {
       margin-right: 2vh;
       margin-left: auto;
+      cursor: pointer;
     }
   }
 }
@@ -239,10 +260,8 @@ export default {
   text-align: center;
   padding: 4px;
 }
-.movie-list {
-  .list-is-not-present {
-    text-align: center;
-    margin-top: 60%;
-  }
+.list-is-not-present {
+  text-align: center;
+  margin-top: 30%;
 }
 </style>

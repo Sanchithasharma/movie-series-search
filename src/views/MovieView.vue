@@ -135,7 +135,7 @@ $font-color: gray;
   padding: 16px;
   .no-view-to-show {
     text-align: center;
-    padding-top: 40%;
+    padding-top: 30%;
   }
   .movie-view-container {
     display: flex;
