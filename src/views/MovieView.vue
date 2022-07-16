@@ -1,66 +1,71 @@
 <template>
   <div class="movie-view">
-    <div class="movie-view-container" :v-loading="isLoading">
-      <div class="movie-image">
-        <el-image
-          style="width: 200px; height: 300px"
-          :src="movieInfo.Poster"
-          fit="fill"
-        />
-      </div>
-
-      <div class="movie-info">
-        <h1>{{ movieInfo.Title }}</h1>
-        <div class="movie-year-genre-runtime">
-          <span class="movie-rated">{{ movieInfo.Rated }}</span>
-          <span> &#183; </span>
-
-          <span>{{ movieInfo.Year }} </span>
-          <span> &#183; </span>
-
-          <span>{{ movieInfo.Genre }} </span>
-          <span> &#183; </span>
-
-          <span>{{ movieInfo.Runtime }} </span>
+    <el-card :body-style="{ height: '80vh' }">
+      <div class="movie-view-container" :v-loading="isLoading">
+        <div class="movie-image">
+          <el-image
+            style="width: 200px; height: 300px"
+            :src="movieInfo.Poster"
+            fit="fill"
+          />
         </div>
-        <br />
-        <div>{{ movieInfo.Actors }}</div>
+
+        <div class="movie-info">
+          <h1>{{ movieInfo.Title }}</h1>
+          <div class="movie-year-genre-runtime">
+            <span class="movie-rated">{{ movieInfo.Rated }}</span>
+            <span> &#183; </span>
+
+            <span>{{ movieInfo.Year }} </span>
+            <span> &#183; </span>
+
+            <span>{{ movieInfo.Genre }} </span>
+            <span> &#183; </span>
+
+            <span>{{ movieInfo.Runtime }} </span>
+          </div>
+          <br />
+          <div>{{ movieInfo.Actors }}</div>
+        </div>
+
+        <div class="watchlist-button-container">
+          <el-button
+            size="large"
+            type="info"
+            plain
+            @click="addThisShowToWatchList"
+          >
+            Watchlist<el-icon class="el-icon--right"><CollectionTag /></el-icon>
+          </el-button>
+        </div>
       </div>
 
-      <div class="watchlist-button-container">
-        <el-button
-          size="large"
-          type="info"
-          plain
-          @click="addThisShowToWatchList"
+      <el-divider />
+      <div class="movie-plot">
+        {{ movieInfo.Plot }}
+      </div>
+      <el-divider />
+
+      <div class="movie-ratings">
+        <div
+          class="rating"
+          v-for="item in movieInfo.Ratings"
+          :key="movieInfo.Ratings.indexOf(item)"
+          :gutter="12"
         >
-          Watchlist<el-icon class="el-icon--right"><CollectionTag /></el-icon>
-        </el-button>
+          <el-card>
+            <div class="rating-number">{{ item.Value }}</div>
+            <div class="rating-website">{{ item.Source }}</div>
+          </el-card>
+        </div>
       </div>
-    </div>
-
-    <el-divider />
-    <div class="movie-plot">
-      {{ movieInfo.Plot }}
-    </div>
-    <el-divider />
-
-    <div class="movie-ratings">
-      <div
-        class="rating"
-        v-for="item in movieInfo.Ratings"
-        :key="movieInfo.Ratings.indexOf(item)"
-      >
-        <div class="rating-number">{{ item.Value }}</div>
-        <div class="rating-website">{{ item.Source }}</div>
-      </div>
-    </div>
+    </el-card>
   </div>
 </template>
 
 <script>
 import axios from "axios";
-import { store } from "../store/watchlist.js";
+import { store } from "../store/store.js";
 
 export default {
   name: "movie-view",
@@ -79,6 +84,7 @@ export default {
         .get("http://www.omdbapi.com/?apikey=3b773132", {
           params: {
             i: this.idmbId,
+            plot: "full",
           },
         })
         .then((response) => {
@@ -161,13 +167,12 @@ $font-color: gray;
 
 .movie-ratings {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-evenly;
+  .el-card {
+    width: 24vh;
+  }
   .rating {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
+    text-align: center;
     .rating-number {
       font-size: larger;
       padding: 4px;

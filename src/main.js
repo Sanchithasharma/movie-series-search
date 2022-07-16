@@ -4,7 +4,7 @@ import ElementPlus from "element-plus";
 import "element-plus/dist/index.css";
 import * as ElementPlusIconsVue from "@element-plus/icons-vue";
 import mitt from 'mitt'
-import { store } from "./store/watchlist";
+import { store } from "./store/store.js";
 
 
 const emitter = mitt()

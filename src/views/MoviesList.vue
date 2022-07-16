@@ -6,7 +6,9 @@
         >View Watchlist</el-link
       >
     </div>
-    <div class="movie-list-container">
+    <div
+      class="movie-list-container"
+    >
       <ul
         class="movie-item"
         v-for="item in moviesList.Search"
@@ -72,7 +74,7 @@
 <script>
 import axios from "axios";
 import { ref } from "vue";
-import { store } from "../store/watchlist.js";
+import { store } from "../store/store.js";
 
 export default {
   data() {
@@ -84,6 +86,9 @@ export default {
       searchString: "star",
       watchList: [],
       isLoading: false,
+      type: "",
+      yearOfRelease: "2022",
+      busy: false,
     };
   },
   mounted() {
@@ -95,6 +100,17 @@ export default {
       this.searchString = evt.eventContent;
       this.getMoviesList(this.page);
     });
+
+    this.emitter.on("typeOfShow", (evt) => {
+      this.type = evt.eventContent;
+      this.getMoviesList(this.page);
+    });
+
+    this.emitter.on("year", (evt) => {
+      this.yearOfRelease = evt.eventContent;
+      console.table(this.yearOfRelease);
+      this.getMoviesList(this.page);
+    });
   },
   methods: {
     getMoviesList(page) {
@@ -103,8 +119,8 @@ export default {
         .get("https://www.omdbapi.com/?apikey=3b773132", {
           params: {
             s: this.searchString,
-            type: "",
-            y: "1970-2020",
+            type: this.type,
+            y: this.yearOfRelease,
             page: page,
           },
         })
@@ -127,7 +143,11 @@ export default {
     },
     deleteShowFromWatchList(item) {
       store.commit("removeFromWatchList", item);
-    }
+    },
+    loadNextPage() {
+      console.log(this.page);
+      console.table(this.moviesList.Search);
+    },
   },
 };
 </script>
@@ -135,7 +155,7 @@ export default {
 <style lang="scss">
 .movie-list-container,
 .watch-list-container {
-  height: 72vh;
+  height: 80vh;
   overflow-y: auto;
   .movie-item,
   .watch-list-item {
@@ -176,7 +196,7 @@ export default {
 .watch-list-container {
   border: 1px solid #d1dbe561;
   .watch-list-item {
-  margin: 4px;
+    margin: 4px;
     i.el-icon.delete-icon {
       margin-right: 2vh;
       margin-left: auto;

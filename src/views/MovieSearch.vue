@@ -10,7 +10,7 @@
     >
       <div class="search-input">
         <el-input
-          v-model="input4"
+          v-model="searchString"
           class="w-50 m-2"
           placeholder="Type something"
         >
@@ -18,7 +18,11 @@
             <el-icon class="el-input__icon"><search /></el-icon>
           </template>
         </el-input>
-        <el-button>Submit</el-button>
+        <el-button
+          @click="searchShowByString"
+          @keyup.enter="searchShowByString"
+          >Submit</el-button
+        >
       </div>
 
       <div class="flex-grow" />
@@ -26,12 +30,11 @@
         <el-label style="font-size: small">YEAR</el-label>
         <el-slider
           style="width: 160px"
-          v-model="value"
-          range
-          show-stops
-          :min="1970"
+          v-model="yearOfRelease"
+          :min="1950"
           :max="2022"
           :marks="marks"
+          @change="filterShowsByYear"
         />
       </div>
       <div class="show-type">
@@ -39,7 +42,7 @@
         <el-radio-group
           @change="chooseTypeOfList"
           text-color="white"
-          v-model="radio"
+          v-model="typeOfShow"
         >
           <el-radio label="" :size="radioSize">Any</el-radio>
           <el-radio label="movie" :size="radioSize">Movies</el-radio>
@@ -57,23 +60,25 @@ import { ref } from "vue";
 export default {
   data() {
     return {
-      radio: ref(""),
-      radioSize: 'small',
+      typeOfShow: ref(""),
+      radioSize: "small",
       searchString: "",
-      value: ref([1990, 2015]),
+      yearOfRelease: "2022",
       marks: {
-        1970: "1970",
+        1950: "1950",
         2022: "2022",
       },
     };
   },
   methods: {
     chooseTypeOfList() {
-      console.log(this.radio);
+      this.emitter.emit("typeOfShow", { eventContent: this.typeOfShow });
     },
     searchShowByString() {
-      console.log(this.searchString);
       this.emitter.emit("searchString", { eventContent: this.searchString });
+    },
+    filterShowsByYear() {
+      this.emitter.emit("year", { eventContent: this.yearOfRelease });
     },
   },
 };
@@ -101,13 +106,20 @@ export default {
   }
   .el-radio-group {
     margin-right: 2vh;
+    .el-radio {
+      color: red;
+    }
+
 
     label.el-radio.el-radio--small {
       color: white;
+      .is-checked {
+        color: black;
+      }
     }
-    .el-radio__input.is-checked + .el-radio__label {
-      color: white;
-    }
+    // .el-radio__input.is-checked + .el-radio__label {
+    //   color: white;
+    // }
   }
   .year-slider {
     margin: 2vh 2vh;
@@ -117,4 +129,7 @@ export default {
 .flex-grow {
   flex-grow: 1;
 }
+    .el-input__wrapper {
+      background-color: red !important;
+    }
 </style>
