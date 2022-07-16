@@ -1,10 +1,10 @@
 <template>
   <div class="movie-view">
-    <el-card :body-style="{ height: '75vh' }">
+    <el-card :body-style="{ height: '75vh', overflow: 'auto' }">
       <div class="movie-view-container" :v-loading="isLoading">
         <div class="movie-image">
           <el-image
-            style="width: 200px; height: 300px"
+            style="width: 20vh; height: 30vh"
             :src="movieInfo.Poster"
             fit="fill"
           />
@@ -148,11 +148,10 @@ $font-color: gray;
     }
   }
   .movie-info {
-    margin-top: 100px;
     margin-left: 20px;
     word-wrap: break-word;
     .movie-year-genre-runtime {
-      font-size: larger;
+      font-size: large;
     }
     .movie-rated {
       border: 1px $font-color solid;
@@ -170,6 +169,7 @@ $font-color: gray;
   justify-content: space-evenly;
   .el-card {
     width: 24vh;
+    overflow: auto;
   }
   .rating {
     text-align: center;
@@ -182,9 +182,5 @@ $font-color: gray;
       font-size: small;
     }
   }
-}
-
-.movie-plot {
-  font-size: large;
 }
 </style>

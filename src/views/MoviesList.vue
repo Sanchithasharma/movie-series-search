@@ -86,14 +86,12 @@
 
 <script>
 import axios from "axios";
-import { ref } from "vue";
 import { store } from "../store/store.js";
 
 export default {
   data() {
     return {
       moviesList: [],
-      count: ref(0),
       page: 1,
       dialogTableVisible: false,
       searchString: "star",
@@ -110,19 +108,7 @@ export default {
     this.watchList = store.state.watchList;
   },
   created() {
-    this.emitter.on("searchString", (evt) => {
-      this.searchString = evt.eventContent;
-      this.getMoviesList((this.page = 1));
-    });
-
-    this.emitter.on("typeOfShow", (evt) => {
-      this.type = evt.eventContent;
-      this.getMoviesList((this.page = 1));
-    });
-
-    this.emitter.on("year", (evt) => {
-      this.yearOfRelease = evt.eventContent;
-      console.table(this.yearOfRelease);
+    this.emitter.on("triggerMovieListApi", () => {
       this.getMoviesList((this.page = 1));
     });
   },
@@ -132,9 +118,9 @@ export default {
       axios
         .get("https://www.omdbapi.com/?apikey=3b773132", {
           params: {
-            s: this.searchString,
-            type: this.type,
-            y: this.yearOfRelease,
+            s: store.state.searchString,
+            type: store.state.typeOfShow,
+            y: store.state.yearOfRelease,
             page: page,
           },
         })
