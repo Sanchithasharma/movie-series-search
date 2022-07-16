@@ -1,8 +1,8 @@
 <template>
   <div class="app">
-    <div class="app-header">
+    <header class="app-header">
       <MovieSearch />
-    </div>
+    </header>
 
     <div class="app-body">
       <MoviesList />

@@ -1,6 +1,6 @@
 <template>
   <div class="movie-view">
-    <el-card :body-style="{ height: '80vh' }">
+    <el-card :body-style="{ height: '75vh' }">
       <div class="movie-view-container" :v-loading="isLoading">
         <div class="movie-image">
           <el-image
@@ -112,7 +112,7 @@ export default {
     },
   },
   mounted() {
-    this.getMovieInfo();
+    // this.getMovieInfo();
   },
   created() {
     this.emitter.on("imdbID", (evt) => {

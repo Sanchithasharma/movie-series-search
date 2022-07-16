@@ -1,36 +1,49 @@
 <template>
   <div class="movie-list" v-loading="isLoading">
-    <div class="movie-list-length">
-      <span>{{ moviesList.totalResults }} results</span>
-      <el-link type="primary" @click="dialogTableVisible = true"
-        >View Watchlist</el-link
-      >
-    </div>
-    <div
-      class="movie-list-container"
-    >
-      <ul
-        class="movie-item"
-        v-for="item in moviesList.Search"
-        :key="item.imdbID"
-        style="overflow: auto"
-        @click="sendShowId(item)"
-      >
-        <li>
-          <span>
-            <el-image
-              style="width: 80px; height: 80px"
-              :src="item.Poster"
-              fit="fill"
-            />
-          </span>
-          <span class="movie-info">
-            <p class="movie-title">{{ item.Title }}</p>
-            <p class="movie-year">{{ item.Year }}</p>
-          </span>
-        </li>
-      </ul>
-    </div>
+    <el-col v-if="emptyList" class="list-is-not-present">
+      No results found
+    </el-col>
+    <el-col v-if="!emptyList" class="list-is-present">
+      <div class="movie-list-length">
+        <span>{{ moviesList.totalResults }} results</span>
+        <el-link type="primary" @click="dialogTableVisible = true"
+          >View Watchlist</el-link
+        >
+      </div>
+      <div class="movie-list-container">
+        <ul
+          class="movie-item"
+          v-for="item in showsList"
+          :key="item.imdbID"
+          style="overflow: auto"
+          @click="sendShowId(item)"
+        >
+          <li>
+            <span>
+              <el-image
+                style="width: 80px; height: 80px"
+                :src="item.Poster"
+                fit="fill"
+              >
+              </el-image>
+            </span>
+            <span class="movie-info">
+              <p class="movie-title">{{ item.Title }}</p>
+              <p class="movie-year">{{ item.Year }}</p>
+            </span>
+          </li>
+        </ul>
+        <div class="load-more-button-container">
+          <el-button
+            class="load-more-button"
+            plain
+            type="info"
+            @click="loadNextPage"
+            >Load more</el-button
+          >
+        </div>
+      </div>
+    </el-col>
 
     <el-dialog v-model="dialogTableVisible" title="Watchlist" center>
       <div class="watch-list-container" style="height: 50vh" center>
@@ -89,27 +102,28 @@ export default {
       type: "",
       yearOfRelease: "2022",
       busy: false,
+      showsList: [],
     };
   },
   mounted() {
-    this.getMoviesList(this.page);
+    // this.getMoviesList(this.page);
     this.watchList = store.state.watchList;
   },
   created() {
     this.emitter.on("searchString", (evt) => {
       this.searchString = evt.eventContent;
-      this.getMoviesList(this.page);
+      this.getMoviesList((this.page = 1));
     });
 
     this.emitter.on("typeOfShow", (evt) => {
       this.type = evt.eventContent;
-      this.getMoviesList(this.page);
+      this.getMoviesList((this.page = 1));
     });
 
     this.emitter.on("year", (evt) => {
       this.yearOfRelease = evt.eventContent;
       console.table(this.yearOfRelease);
-      this.getMoviesList(this.page);
+      this.getMoviesList((this.page = 1));
     });
   },
   methods: {
@@ -126,8 +140,16 @@ export default {
         })
         .then((response) => {
           console.log(response.data);
-          this.moviesList = response.data;
+          if (response && response.data) {
+            this.moviesList = response.data;
+            this.showsList.push(...this.moviesList.Search);
+            // if (this.page > 1) {
+            //   this.showsList.push(...this.moviesList.Search);
+            // }
+          }
+
           this.isLoading = false;
+          console.log(this.showsList);
         })
         .catch((error) => {
           console.log(error);
@@ -145,8 +167,20 @@ export default {
       store.commit("removeFromWatchList", item);
     },
     loadNextPage() {
+      this.page++;
       console.log(this.page);
-      console.table(this.moviesList.Search);
+      this.getMoviesList(this.page);
+    },
+  },
+  computed: {
+    hideLoadMoreButton() {
+      return (
+        this.showsList.length === this.moviesList.totalResults ||
+        this.showsList.length % 10 !== 0
+      );
+    },
+    emptyList() {
+      return this.showsList.length === 0;
     },
   },
 };
@@ -155,8 +189,9 @@ export default {
 <style lang="scss">
 .movie-list-container,
 .watch-list-container {
-  height: 80vh;
+  height: 72vh;
   overflow-y: auto;
+  margin-top: 2px;
   .movie-item,
   .watch-list-item {
     border-bottom: 1px lightgray solid;
@@ -173,8 +208,13 @@ export default {
       align-items: center;
       padding-left: 4%;
       .el-image {
+        margin-top: 2%;
         border-radius: 4px;
         padding: 12px;
+
+        .el-image__error span {
+          display: none;
+        }
       }
     }
     .movie-info {
@@ -208,5 +248,15 @@ export default {
   color: gray;
   display: flex;
   justify-content: space-between;
+}
+.load-more-button-container {
+  text-align: center;
+  padding: 4px;
+}
+.movie-list {
+  .list-is-not-present {
+    text-align: center;
+    margin-top: 60%;
+  }
 }
 </style>
