@@ -116,9 +116,6 @@ export default {
   }
   .el-radio-group {
     margin-right: 2vh;
-    .el-radio {
-      color: red;
-    }
 
     label.el-radio.el-radio--small {
       color: white;
@@ -136,11 +133,20 @@ export default {
   flex-grow: 1;
 }
 ::v-deep .el-input__wrapper {
-    // background-color: #666666 !important;
-    border: none;
-    color: white !important;
+  // background-color: #666666 !important;
+  border: none;
+  color: white !important;
 }
 ::v-deep .el-slider__bar {
-  background-color: #C4C4C4 !important;
+  background-color: #c4c4c4 !important;
+}
+
+::v-deep span.el-radio__inner.is-checked{
+  background: black;
+  border-color: black;
+}
+
+::v-deep .el-slider__button.el-tooltip__trigger.el-tooltip__trigger {
+  border-color: rgb(0 0 0 / 62%);
 }
 </style>
