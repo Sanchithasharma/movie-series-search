@@ -55,7 +55,6 @@
             class="rating"
             v-for="item in movieInfo.Ratings"
             :key="movieInfo.Ratings.indexOf(item)"
-            :gutter="12"
           >
             <el-card>
               <div class="rating-number">{{ item.Value }}</div>
@@ -117,7 +116,7 @@ export default {
     },
   },
   mounted() {
-    // this.getMovieInfo();
+    this.getMovieInfo();
   },
   created() {
     this.emitter.on("imdbID", (evt) => {

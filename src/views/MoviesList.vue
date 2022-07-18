@@ -5,7 +5,7 @@
     </el-col>
     <el-col v-if="!emptyList" class="list-is-present">
       <div class="movie-list-length">
-        <span>{{ moviesList.totalResults }} results</span>
+        <span>{{ numberOfResults }} results</span>
         <el-link type="primary" @click="dialogTableVisible = true"
           >View Watchlist</el-link
         >
@@ -33,11 +33,14 @@
             </span>
           </li>
         </ul>
-        <div class="load-more-button-container">
+        <div
+          class="load-more-button-container"
+        >
           <el-button
             class="load-more-button"
             plain
             type="info"
+            v-if="!hideLoadMoreButton"
             @click="loadNextPage"
             >Load more</el-button
           >
@@ -64,7 +67,11 @@
               />
             </span>
             <span class="movie-info">
-              <el-link class="movie-title" style="font-size: small" @click="loadWatchListToView(item)">
+              <el-link
+                class="movie-title"
+                style="font-size: small"
+                @click="loadWatchListToView(item)"
+              >
                 {{ item.Title }}
               </el-link>
               <p class="movie-year">
@@ -102,15 +109,18 @@ export default {
       yearOfRelease: "2022",
       busy: false,
       showsList: [],
+      numberOfResults: 0,
     };
   },
   mounted() {
-    // this.getMoviesList(this.page);
+    this.getMoviesList(this.page);
     this.watchList = store.state.watchList;
   },
   created() {
     this.emitter.on("triggerMovieListApi", () => {
-      this.getMoviesList((this.page = 1));
+      this.page = 1;
+      this.showsList.length = 0;
+      this.getMoviesList(this.page);
     });
   },
   methods: {
@@ -126,17 +136,12 @@ export default {
           },
         })
         .then((response) => {
-          console.log(response.data);
-          if (response && response.data) {
+          if (response.data.Response) {
             this.moviesList = response.data;
+            this.numberOfResults = response.data.totalResults;
             this.showsList.push(...this.moviesList.Search);
-            // if (this.page > 1) {
-            //   this.showsList.push(...this.moviesList.Search);
-            // }
           }
-
           this.isLoading = false;
-          console.log(this.showsList);
         })
         .catch((error) => {
           console.log(error);
@@ -147,26 +152,21 @@ export default {
       this.emitter.emit("imdbID", { eventContent: show.imdbID });
     },
     loadWatchListToView(show) {
-      console.log(show)
       this.dialogTableVisible = false;
       this.sendShowId(show);
     },
     deleteShowFromWatchList(item) {
       store.commit("removeFromWatchList", item.imdbID);
-      console.log(item)
+      console.log(item);
     },
     loadNextPage() {
       this.page++;
-      console.log(this.page);
       this.getMoviesList(this.page);
     },
   },
   computed: {
     hideLoadMoreButton() {
-      return (
-        this.showsList.length === this.moviesList.totalResults ||
-        this.showsList.length % 10 !== 0
-      );
+      return Number(this.numberOfResults) === Number(this.showsList.length)
     },
     emptyList() {
       return this.showsList.length === 0;

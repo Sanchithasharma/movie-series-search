@@ -9,17 +9,12 @@
       @select="handleSelect"
     >
       <div class="search-input">
-        <el-input
-          v-model="searchString"
-          placeholder="Type something"
-        >
+        <el-input v-model="searchString" placeholder="Type something">
           <template #prefix>
             <el-icon class="el-input__icon"><search /></el-icon>
           </template>
         </el-input>
-        <el-button @click="searchShowByString"
-          >Submit</el-button
-        >
+        <el-button @click="searchShowByString">Submit</el-button>
       </div>
 
       <div class="flex-grow" />
@@ -58,7 +53,7 @@ import { store } from "../store/store.js";
 export default {
   data() {
     return {
-      typeOfShow: '',
+      typeOfShow: "",
       radioSize: "small",
       searchString: ref(""),
       yearOfRelease: 0,
@@ -77,24 +72,24 @@ export default {
     },
     filterShowsByYear() {
       store.commit("filterShowsByYear", this.yearOfRelease);
-      this.triggerMovieListApi()
+      this.triggerMovieListApi();
     },
     triggerMovieListApi() {
       this.emitter.emit("triggerMovieListApi");
     },
     getCurrentYear() {
-      const currentYearStr = this.currentYear.toString()
+      const currentYearStr = this.currentYear.toString();
       this.marks = {
         1950: "1950",
       };
-      this.marks[this.currentYear] = currentYearStr
+      this.marks[this.currentYear] = currentYearStr;
     },
   },
   mounted() {
     this.yearOfRelease = store.state.yearOfRelease;
-    this.searchString = store.state.searchString
-    this.typeOfShow = store.state.typeOfShow
-    this.getCurrentYear()
+    this.searchString = store.state.searchString;
+    this.typeOfShow = store.state.typeOfShow;
+    this.getCurrentYear();
   },
 };
 </script>
@@ -140,7 +135,12 @@ export default {
 .flex-grow {
   flex-grow: 1;
 }
-.el-input__wrapper {
-  background-color: red !important;
+::v-deep .el-input__wrapper {
+    // background-color: #666666 !important;
+    border: none;
+    color: white !important;
+}
+::v-deep .el-slider__bar {
+  background-color: #C4C4C4 !important;
 }
 </style>
