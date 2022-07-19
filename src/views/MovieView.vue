@@ -1,7 +1,9 @@
 <template>
   <div class="movie-view">
     <el-card :body-style="{ height: '75vh', overflow: 'auto' }">
-      <el-col class="no-view-to-show" v-if="!!movieInfo.Title === false"> Please click on any show from the list </el-col>
+      <el-col class="no-view-to-show" v-if="!!movieInfo.Title === false">
+        Please click on any show from the list
+      </el-col>
       <el-col v-else class="no-view">
         <div class="movie-view-container" :v-loading="isLoading">
           <div class="movie-image">
@@ -103,16 +105,6 @@ export default {
     },
     addThisShowToWatchList() {
       store.commit("addToWatchList", this.movieInfo);
-    },
-  },
-  computed: {
-    checkIfShowIsInWatchList() {
-      this.watchList.foreach((el) => {
-        if (el.imdbID === this.movieInfo.imdbID) {
-          return false;
-        }
-      });
-      return true;
     },
   },
   mounted() {

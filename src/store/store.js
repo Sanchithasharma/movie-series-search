@@ -12,24 +12,34 @@ export const store = createStore({
   },
   mutations: {
     addToWatchList(state, show) {
-      show.listed = true
-      state.watchList.push(show)
-      console.log(state.watchList)
+      show.listed = true;
+      state.watchList.push(show);
+      console.log(state.watchList);
     },
     removeFromWatchList(state, id) {
-      let arr = state.watchList
-      arr = arr.filter((obj) => obj.imdbID !==id)
-      state.watchList = arr
+      state.watchList = state.watchList.filter((obj) => {
+         return obj.imdbID !== id;
+      });
       console.log(state.watchList)
     },
     filterShowsByYear(state, selectedYear) {
-      state.yearOfRelease = selectedYear
+      state.yearOfRelease = selectedYear;
     },
     filterShowsByString(state, string) {
-      state.searchString = string
+      state.searchString = string;
     },
     filterByType(state, type) {
-      state.typeOfShow = type
+      state.typeOfShow = type;
     },
-  }
+  },
+  getters: {
+    movieIsAlreadyAddedToWatchList: (state) => (id) => {
+      state.watchList.forEach((element) => {
+        if (element.imdbID === id) {
+          return true;
+        }
+      });
+      return false;
+    },
+  },
 });

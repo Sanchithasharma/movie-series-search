@@ -19,13 +19,20 @@
 
       <div class="flex-grow" />
       <div class="year-slider">
-        <el-label style="font-size: small">YEAR</el-label>
+        <el-checkbox
+          label="YEAR"
+          size="small"
+          v-model="enableYear"
+          text-color="white"
+          @change="filterByMovieNeededOrNot($event)"
+        />
         <el-slider
           style="width: 160px"
           v-model="yearOfRelease"
           :min="1950"
           :max="currentYear"
           :marks="marks"
+          :disabled="!enableYear"
           @change="filterShowsByYear"
         />
       </div>
@@ -59,6 +66,7 @@ export default {
       yearOfRelease: 0,
       currentYear: Number(new Date().getFullYear()),
       marks: {},
+      enableYear: true,
     };
   },
   methods: {
@@ -71,7 +79,7 @@ export default {
       this.triggerMovieListApi();
     },
     filterShowsByYear() {
-      store.commit("filterShowsByYear", this.yearOfRelease);
+      store.commit("filterShowsByYear", this.enableYearFilter);
       this.triggerMovieListApi();
     },
     triggerMovieListApi() {
@@ -83,6 +91,18 @@ export default {
         1950: "1950",
       };
       this.marks[this.currentYear] = currentYearStr;
+    },
+    filterByMovieNeededOrNot() {
+      this.filterShowsByYear();
+    },
+  },
+  computed: {
+    enableYearFilter() {
+      if (this.enableYear) {
+        return this.yearOfRelease;
+      } else {
+        return "";
+      }
     },
   },
   mounted() {
@@ -119,9 +139,6 @@ export default {
 
     label.el-radio.el-radio--small {
       color: white;
-      .is-checked {
-        color: black;
-      }
     }
   }
   .year-slider {
@@ -137,16 +154,20 @@ export default {
   border: none;
   color: white !important;
 }
-::v-deep .el-slider__bar {
-  background-color: #c4c4c4 !important;
-}
+// ::v-deep .el-slider__bar {
+//   // background-color: #c4c4c4 !important;
+// }
 
-::v-deep span.el-radio__inner.is-checked{
+::v-deep span.el-radio__inner.is-checked {
   background: black;
   border-color: black;
 }
 
 ::v-deep .el-slider__button.el-tooltip__trigger.el-tooltip__trigger {
   border-color: rgb(0 0 0 / 62%);
+}
+
+label.el-checkbox.el-checkbox--small {
+  color: white;
 }
 </style>

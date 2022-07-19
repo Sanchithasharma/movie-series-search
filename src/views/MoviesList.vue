@@ -157,7 +157,7 @@ export default {
     },
     deleteShowFromWatchList(item) {
       store.commit("removeFromWatchList", item.imdbID);
-      console.log(item);
+      this.watchList = store.state.watchList;
     },
     loadNextPage() {
       this.page++;
