@@ -1,7 +1,7 @@
 ## Movie Search Application
 
 ### Framework used:
-- Vue.js
+- Vue 3
 
 ### CSS Framework:
 -  Element UI
