@@ -107,7 +107,6 @@ export default {
       isLoading: false,
       type: "",
       yearOfRelease: "2022",
-      busy: false,
       showsList: [],
       numberOfResults: 0,
     };

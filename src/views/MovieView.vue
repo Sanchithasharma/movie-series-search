@@ -78,7 +78,7 @@ export default {
   data() {
     return {
       movieInfo: {},
-      idmbId: "tt2267998",
+      idmbId: "tt12327578",
       showWatchListButton: true,
       isLoading: false,
     };
