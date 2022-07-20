@@ -1,24 +1,18 @@
-# movie-search
+## Movie Search Application
 
-## Project setup
-```
-npm install
-```
+### Framework used:
+- Vue 3
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+### CSS Framework:
+-  Element UI
+-  SASS
 
-### Compiles and minifies for production
-```
-npm run build
-```
+### API:
+ - OMDB API (https://www.omdbapi.com/)
 
-### Lints and fixes files
-```
-npm run lint
-```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### Code flow
+
+<img width="709" alt="image" src="https://user-images.githubusercontent.com/61076978/179907809-9da84740-4c4d-44a1-ba9c-800b42451b9f.png">
+
+
