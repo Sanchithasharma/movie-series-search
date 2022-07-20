@@ -4,7 +4,7 @@
       <el-col class="no-view-to-show" v-if="!!movieInfo.Title === false">
         Please click on any show from the list
       </el-col>
-      <el-col v-else class="no-view">
+      <el-col v-else class="is-view">
         <div class="movie-view-container" :v-loading="isLoading">
           <div class="movie-image">
             <el-image

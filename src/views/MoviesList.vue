@@ -99,7 +99,7 @@ import { store } from "../store/store.js";
 export default {
   data() {
     return {
-      moviesList: [],
+      apiResponse: [],
       page: 1,
       dialogTableVisible: false,
       searchString: "star",
@@ -136,9 +136,9 @@ export default {
         })
         .then((response) => {
           if (response.data.Response) {
-            this.moviesList = response.data;
+            this.apiResponse = response.data;
             this.numberOfResults = response.data.totalResults;
-            this.showsList.push(...this.moviesList.Search);
+            this.showsList.push(...this.apiResponse.Search);
           }
           this.isLoading = false;
         })
@@ -198,10 +198,6 @@ export default {
         margin-top: 2%;
         border-radius: 4px;
         padding: 12px;
-
-        .el-image__error span {
-          display: none;
-        }
       }
     }
   }
@@ -236,10 +232,6 @@ export default {
         margin-top: 2%;
         border-radius: 4px;
         padding: 12px;
-
-        .el-image__error span {
-          display: none;
-        }
       }
     }
     margin: 4px;
