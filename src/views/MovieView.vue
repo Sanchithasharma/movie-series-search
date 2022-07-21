@@ -36,6 +36,7 @@
             <el-button
               size="large"
               type="info"
+              v-if="!showWatchlistButton"
               plain
               @click="addThisShowToWatchList"
             >
@@ -79,7 +80,6 @@ export default {
     return {
       movieInfo: {},
       idmbId: "tt12327578",
-      showWatchListButton: true,
       isLoading: false,
     };
   },
@@ -109,12 +109,21 @@ export default {
   },
   mounted() {
     this.getMovieInfo();
+    console.log(this.showWatchlistButton);
   },
   created() {
     this.emitter.on("imdbID", (evt) => {
       this.idmbId = evt.eventContent;
       this.getMovieInfo();
     });
+  },
+  computed: {
+    showWatchlistButton() {
+      let alreadyExists = store.state.watchList.some(
+        (item) => item.imdbID === this.movieInfo.imdbID
+      );
+      return alreadyExists;
+    },
   },
 };
 </script>
