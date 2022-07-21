@@ -12,9 +12,12 @@ export const store = createStore({
   },
   mutations: {
     addToWatchList(state, show) {
-      show.listed = true;
-      state.watchList.push(show);
-      console.log(state.watchList);
+      let alreadyWatchlisted = state.watchList.some(item => Object.keys(item).every(key => item[key] === show[key]))
+
+      if (alreadyWatchlisted === false) {
+        show.listed = true;
+        state.watchList.push(show);
+      }
     },
     removeFromWatchList(state, id) {
       state.watchList = state.watchList.filter((obj) => {
