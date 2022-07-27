@@ -87,7 +87,7 @@ export default {
     getMovieInfo() {
       this.isLoading = true;
       axios
-        .get("http://www.omdbapi.com/?apikey=3b773132", {
+        .get("https://www.omdbapi.com/?apikey=3b773132", {
           params: {
             i: this.idmbId,
             plot: "full",
