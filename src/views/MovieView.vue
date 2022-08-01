@@ -1,11 +1,14 @@
 <template>
   <div class="movie-view">
-    <el-card :body-style="{ height: '75vh', overflow: 'auto' }">
+    <el-card
+      :body-style="{ height: '75vh', overflow: 'auto' }"
+      :v-loading="isLoading"
+    >
       <el-col class="no-view-to-show" v-if="!!movieInfo.Title === false">
         Please click on any show from the list
       </el-col>
       <el-col v-else class="is-view">
-        <div class="movie-view-container" :v-loading="isLoading">
+        <div class="movie-view-container">
           <div class="movie-image">
             <el-image
               style="width: 20vh; height: 30vh"
@@ -79,7 +82,7 @@ export default {
   data() {
     return {
       movieInfo: {},
-      idmbId: "tt12327578",
+      idmbId: "",
       isLoading: false,
     };
   },
@@ -112,8 +115,9 @@ export default {
     console.log(this.showWatchlistButton);
   },
   created() {
-    this.emitter.on("imdbID", (evt) => {
-      this.idmbId = evt.eventContent;
+    this.emitter.on("imdbID", () => {
+      this.isLoading = true;
+      this.idmbId = store.state.imdbID;
       this.getMovieInfo();
     });
   },
