@@ -148,7 +148,8 @@ export default {
         });
     },
     sendShowId(show) {
-      this.emitter.emit("imdbID", { eventContent: show.imdbID });
+      store.commit("filterByImdbId", show.imdbID);
+      this.emitter.emit("imdbID");
     },
     loadWatchListToView(show) {
       this.dialogTableVisible = false;

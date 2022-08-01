@@ -8,6 +8,7 @@ export const store = createStore({
       typeOfShow: ref(""),
       yearOfRelease: Number(new Date().getFullYear()),
       searchString: ref("star"),
+      imdbID: 'tt12327578'
     };
   },
   mutations: {
@@ -33,6 +34,9 @@ export const store = createStore({
     },
     filterByType(state, type) {
       state.typeOfShow = type;
+    },
+    filterByImdbId(state, imdbID) {
+      state.imdbID = imdbID;
     },
   },
   getters: {
